@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MyRating</string>
+    <string name="tidak_puas">Not Satisfied</string>
+    <string name="puas">Satisfied</string>
+    <string name="sangat_puas">Very Satisfied</string>
+    <string name="beri_penilaian_untuk_kami">Please rate us</string>
+    <string name="terima_kasih_untuk_penilaian_anda">Thank you for you rating</string>
+    <string name="kembali">Kembali</string>
+    <string name="selamat_datang_di_kpp_kebayoran_baru_2">"Selamat datang Di KPP Kebayoran Baru 2     Selamat datang Di KPP Kebayoran Baru 2     Selamat datang Di KPP Kebayoran Baru 2"</string>
+    <string name="configuration">Configuration</string>
+    <string name="save">Save</string>
+    <string name="cancel">Back</string>
+    <string name="server_name">Server Name</string>
+    <string name="username">Username</string>
+    <string name="counter">Counter</string>
+</resources>
