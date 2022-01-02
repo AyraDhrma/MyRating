@@ -47,7 +47,6 @@
         android:ellipsize="end"
         android:gravity="center"
         android:imeOptions="actionDone"
-        android:inputType="number"
         android:maxLines="1"
         android:padding="@dimen/_4sdp"
         android:singleLine="true"
