@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/purple_700"
-    tools:context=".FinishRating">
+    tools:context=".view.finish.FinishRating">
 
     <TextView
         android:id="@+id/rating_label_view"

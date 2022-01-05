@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/purple_700"
-    tools:context=".ConfigSetting">
+    tools:context=".view.config.ConfigSetting">
 
     <TextView
         android:id="@+id/config_label"
