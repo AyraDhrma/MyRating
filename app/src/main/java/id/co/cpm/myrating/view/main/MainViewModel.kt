@@ -23,4 +23,18 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
         }
     }
 
+    fun saveRating(requestModel: RequestModel) = liveData(Dispatchers.IO) {
+        emit(ResourceApiModel.loading(data = null))
+        try {
+            emit(ResourceApiModel.success(data = mainRepository.saveRating(requestModel)))
+        } catch (e: Exception) {
+            emit(
+                ResourceApiModel.error(
+                    data = null,
+                    message = e.localizedMessage ?: "Something Went Wrong"
+                )
+            )
+        }
+    }
+
 }

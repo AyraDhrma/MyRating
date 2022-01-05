@@ -13,4 +13,7 @@ interface ApiService {
     @POST("/feedback_api/Feedback/video")
     suspend fun getInformation(@Body user: RequestModel): InformationModel
 
+    @POST("/feedback_api/Feedback/data")
+    suspend fun saveRating(@Body user: RequestModel): InformationModel
+
 }

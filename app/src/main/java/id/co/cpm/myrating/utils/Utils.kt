@@ -6,10 +6,12 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Build
 import android.os.CountDownTimer
+import android.util.Base64
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import id.co.cpm.myrating.datasource.ConfigModel
+import java.nio.charset.StandardCharsets
 
 
 object Utils {
@@ -60,6 +62,21 @@ object Utils {
             statusBarColor = Color.TRANSPARENT
             navigationBarColor = colorNav
         }
+    }
+
+    fun View.showLoading() {
+        this.visibility = View.VISIBLE
+    }
+
+    fun View.hideLoading() {
+        this.visibility = View.GONE
+    }
+
+    fun base64Encode(stringToEncode: String): String {
+        return Base64.encodeToString(
+            stringToEncode.toByteArray(StandardCharsets.UTF_8),
+            Base64.NO_WRAP or Base64.URL_SAFE
+        )
     }
 
 }

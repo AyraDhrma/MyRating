@@ -22,6 +22,8 @@ import id.co.cpm.myrating.datasource.DataVideo
 import id.co.cpm.myrating.datasource.RequestModel
 import id.co.cpm.myrating.utils.Status
 import id.co.cpm.myrating.utils.Utils
+import id.co.cpm.myrating.utils.Utils.hideLoading
+import id.co.cpm.myrating.utils.Utils.showLoading
 import id.co.cpm.myrating.view.config.ConfigSetting
 import id.co.cpm.myrating.view.finish.FinishRating
 
@@ -62,9 +64,10 @@ class MainActivity : AppCompatActivity() {
             it?.let { resource ->
                 when (resource.status) {
                     Status.LOADING -> {
-
+                        binding.progressCircular.showLoading()
                     }
                     Status.SUCCESS -> {
+                        binding.progressCircular.hideLoading()
                         if (resource.data?.rc == "0000") {
                             var runningTextValue = ""
                             for (i in resource.data.dataRunning.indices) {
@@ -77,7 +80,9 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     Status.ERROR -> {
-
+                        binding.progressCircular.hideLoading()
+                        Toast.makeText(this@MainActivity, "Koneksi Bermasalah", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
@@ -108,14 +113,14 @@ class MainActivity : AppCompatActivity() {
         binding.videoMain.visibility = View.VISIBLE
         binding.videoMain.apply {
             setOnPreparedListener { mediaPlayer ->
-                val videoRatio = mediaPlayer.videoWidth / mediaPlayer.videoHeight.toFloat()
-                val screenRatio = this.width / this.height.toFloat()
-                val scaleX = videoRatio / screenRatio
-                if (scaleX >= 1f) {
-                    this.scaleX = scaleX
-                } else {
-                    this.scaleY = 1f / scaleX
-                }
+//                val videoRatio = mediaPlayer.videoWidth / mediaPlayer.videoHeight.toFloat()
+//                val screenRatio = this.width / this.height.toFloat()
+//                val scaleX = videoRatio / screenRatio
+//                if (scaleX >= 1f) {
+//                    this.scaleX = scaleX
+//                } else {
+//                    this.scaleY = 1f / scaleX
+//                }
             }
             //setMediaController(mediaController)
             setVideoURI(Uri.parse("http://${Utils.loadConfig(this@MainActivity).servername}$iNFNama"))
@@ -145,14 +150,11 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("ShowToast")
     private fun listener() {
-        val intent = Intent(this@MainActivity, FinishRating::class.java)
         binding.notSatisfied.setOnClickListener {
-            intent.putExtra(Constant.rating, Constant.notsatisfied)
-            startActivity(intent)
+            saveRating("0", Constant.notsatisfied)
         }
         binding.verySatisfied.setOnClickListener {
-            intent.putExtra(Constant.rating, Constant.verysatisfied)
-            startActivity(intent)
+            saveRating("1", Constant.verysatisfied)
         }
 
         var clicked = 3
@@ -175,8 +177,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    var stopPosition // Globally declare class level...
-            = 0
+    private fun saveRating(rating: String, type: String) {
+        val intent = Intent(this@MainActivity, FinishRating::class.java)
+        mainViewModel.saveRating(
+            RequestModel(
+                Constant.apikey,
+                Utils.base64Encode(
+                    "$rating|${Utils.loadConfig(this@MainActivity).counter}|${
+                        Utils.loadConfig(
+                            this@MainActivity
+                        ).username
+                    }"
+                )
+            )
+        ).observe(this, {
+            it?.let { resource ->
+                when (resource.status) {
+                    Status.LOADING -> {
+                        binding.progressCircular.showLoading()
+                    }
+                    Status.SUCCESS -> {
+                        binding.progressCircular.hideLoading()
+                        if (resource.data?.rc == "0000") {
+                            intent.putExtra(Constant.rating, type)
+                            startActivity(intent)
+                        }
+                    }
+                    Status.ERROR -> {
+                        binding.progressCircular.hideLoading()
+                        Toast.makeText(this@MainActivity, "Koneksi Bermasalah", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+        })
+    }
+
+    var stopPosition = 0
 
     override fun onPause() {
         super.onPause()
